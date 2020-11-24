@@ -21,7 +21,9 @@ degPlot(
   color = "black",
   groupLab = group,
   batchLab = batch,
-  sizePoint = 1
+  sizePoint = 1,
+  addMean = FALSE,
+  colorMean = "black"
 )
 }
 \arguments{
@@ -69,6 +71,10 @@ compatible with \code{ggplot2::scale_color_brewer()}.}
 \item{batchLab}{Character, alternative label for batch (default: same as batch).}
 
 \item{sizePoint}{Integer, indicates the size of the plotted points (default 1).}
+
+\item{addMean}{Boolean, indicates if a line representing the mean should be added (default FALSE).}
+
+\item{colorMean}{Character, indicates the color of the mean line (default "black").}
 }
 \value{
 ggplot showing the expresison of the genes

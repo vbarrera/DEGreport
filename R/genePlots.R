@@ -91,6 +91,8 @@ degColors <- function(ann, col_fun = FALSE,
 #' @param groupLab Character, alternative label for group (default: same as group).
 #' @param batchLab Character, alternative label for batch (default: same as batch).
 #' @param sizePoint Integer, indicates the size of the plotted points (default 1).
+#' @param addMean Boolean, indicates if a line representing the mean should be added (default FALSE).
+#' @param colorMean Character, indicates the color of the mean line (default "black").
 #' @return ggplot showing the expresison of the genes
 #' @examples 
 #' data(humanGender)
@@ -114,7 +116,9 @@ degPlot = function(dds, xs, res = NULL, n = 9, genes = NULL,
                    ysLab = "abundance",
                    color = "black",
                    groupLab = group, batchLab = batch,
-                   sizePoint = 1){
+                   sizePoint = 1,
+                   addMean = FALSE,
+                   colorMean = "black"){
     if (class(dds)[1] %in% c("data.frame", "matrix"))
         dds = SummarizedExperiment(assays = SimpleList(counts = as.matrix(dds)),
                                    colData = metadata)
@@ -187,7 +191,21 @@ degPlot = function(dds, xs, res = NULL, n = 9, genes = NULL,
                    position = position_jitterdodge(dodge.width = 0.9)) +
         facet_wrap(~gene, scales = "free_y") +
         xlab(xsLab) +
-        ylab(ysLab)
+        ylab(ysLab) 
+    
+    if(addMean == TRUE) {
+    
+    summ <- dd %>% group_by(xs,gene) %>% 
+        summarise(mean = mean(count)) %>%
+        gather(variable, value, mean)
+    
+    p = p + geom_segment(data=summ,aes(x = as.numeric(as.factor(xs)) - 0.35, 
+                                  xend = as.numeric(as.factor(xs)) + 0.35, 
+                                  yend = value, 
+                                  y = value, 
+                                  ), color = colorMean, lty = 2)
+    }
+    
     if (length(unique(dd[, groupLab])) == 1L) {
         stopifnot(length(color) == 1)
         p = p +

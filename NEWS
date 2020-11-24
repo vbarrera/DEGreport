@@ -1,5 +1,9 @@
 DEGreport News
 
+CHANGES IN DEGreport 1.25.4
+     * Feature: degPlot accepts addMean and colorMean as parameters to plot a line 
+     representing the mean value per gene/group.
+
 CHANGES IN DEGreport 1.25.3
      * Feature: degPlot accepts sizePoint as parameter to indicate the size of
      the plotted points.
